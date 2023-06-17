@@ -80,41 +80,53 @@ function getArray() {
   };
 }
 
+function uniqueID() {
+  return Math.floor(Math.random() * Math.floor(Math.random() * Date.now()));
+}
+
 input.addEventListener("change", (e) => {
   let file = e.target.files[0];
 
-  console.log(file);
-
   if (!file) return;
 
-  let fileObject = {
-    id: fileArray.length,
-    name: file.name,
-    size: file.size,
-    type: file.type,
-    date: file.lastModifiedDate,
-  };
+  if (file.type === "application/pdf") {
+    let fileObject = {
+      id: uniqueID(),
+      name: file.name,
+      size: file.size,
+      type: file.type,
+      date: Date.now(),
+    };
 
-  let reader = new FileReader();
-  reader.onload = (e) => {
-    let data = e.target.result;
-    let fileData = new Blob([data], { type: "application/pdf" });
+    let reader = new FileReader();
+    reader.onload = (e) => {
+      let data = e.target.result;
+      let fileData = new Blob([data], { type: "application/pdf" });
 
-    fileObject.content = fileData;
+      fileObject.content = fileData;
 
-    createDB(fileObject);
-    getArray();
-  };
+      input.value = "";
 
-  reader.readAsArrayBuffer(file);
+      createDB(fileObject);
+      getArray();
+    };
+
+    reader.readAsArrayBuffer(file);
+  }
 });
 
 function renderFiles() {
+  sortFiles();
+  if (!fileArray.length) {
+    fileList.textContent = "No files uploaded";
+    return;
+  }
   let x = "";
   fileArray.forEach((file, index) => {
     x += `
     <div>             
-       <span>
+       <span class = "text">
+       <img src="pngwing.com.png"/>
         <p 
         onclick="viewFile(${index})" 
         class= "p"
@@ -122,12 +134,12 @@ function renderFiles() {
           ${file.name}
         </p>
        </span>
-       <span>
-          ${file.size / 1000 + "kb"}
+       <span class = "size">
+          ${(file.size / 1000000).toFixed(2) + "mb"}
        </span>
        <button onclick="deleteFile(${
          file.id
-       })">delete</button>                   
+       })"><span class="remove">REMOVE</span><span class="x">×</span></button>                   
     </div>`;
   });
 
@@ -166,7 +178,9 @@ function deleteFile(id) {
   getArray();
 }
 
-sort.addEventListener("change", () => {
+sort.addEventListener("change", renderFiles);
+
+function sortFiles() {
   switch (sort.value) {
     case "A-Z":
       fileArray.sort((a, b) => {
@@ -182,15 +196,24 @@ sort.addEventListener("change", () => {
         return 0;
       });
       break;
-    case "size":
+    case "Size":
       fileArray.sort((a, b) => {
         if (a.size < b.size) return -1;
         if (a.size > b.size) return 1;
         return 0;
       });
       break;
+    case "Newest":
+      fileArray.sort((a, b) => {
+        if (a.date < b.date) return 1;
+        if (a.date > b.date) return -1;
+        return 0;
+      });
     default:
-      return;
+      fileArray.sort((a, b) => {
+        if (a.date < b.date) return -1;
+        if (a.date > b.date) return 1;
+        return 0;
+      });
   }
-  renderFiles();
-});
+}

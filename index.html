@@ -3,26 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="pngwing.com.png" type="image/x-icon">
     <link rel="stylesheet" href="style.css" />
     <title>File sorting Webpage</title>
   </head>
   <body>
     <h1>File sorting Webpage</h1>
-    <h3>upload and veiw pdf files.</h3>
+    <p class="description">upload and veiw pdf files.</p>
     <form>
       <input type="file" id="file" accept=".pdf" />
       <label for="sort">sort by</label>
       <select id="sort">
-        <option>none</option>
+        <option>Oldest</option>
+        <option value="Newest">Newest</option>
         <option value="A-Z">A-Z</option>
         <option value="Z-A">Z-A</option>
-        <option value="size">size</option>
+        <option value="Size">Size</option>
       </select>
     </form>
     <div class="container"></div>
-    <div class="veiwer">
-      <code class="code"></code>
-    </div>
     <script src="/js/script.js"></script>
   </body>
 </html>
