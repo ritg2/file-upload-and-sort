@@ -1,0 +1,39 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  margin-top: 20px;
+}
+
+.container > div {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+  background: gray;
+  padding: 0 10px;
+}
+
+.container > div:nth-child(even) {
+  background: rgb(224, 221, 221);
+}
+
+.p {
+  cursor: pointer;
+}
+
+button {
+  cursor: pointer;
+}
+
+.code {
+  display: none;
+}
+
+.show {
+  display: block;
+  transition: 0.3 ease-in-out;
+}
