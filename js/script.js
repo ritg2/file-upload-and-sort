@@ -41,7 +41,6 @@ function getArray() {
   const request = indexedDB.open(dbName, 1);
 
   request.onerror = (e) => {
-    console.log("carryon");
     console.error(e.target.error);
   };
 
@@ -112,13 +111,16 @@ input.addEventListener("change", (e) => {
     };
 
     reader.readAsArrayBuffer(file);
+  } else {
+    alert("The file you uploaded is not a pdf file");
+    input.value = "";
   }
 });
 
 function renderFiles() {
   sortFiles();
   if (!fileArray.length) {
-    fileList.textContent = "No files uploaded";
+    fileList.innerHTML = `<p class = "no-files">No files uploaded<p>`;
     return;
   }
   let x = "";
@@ -165,11 +167,7 @@ function deleteFile(id) {
 
     const store = transaction.objectStore("files");
 
-    const deleteFile = store.delete(id);
-
-    deleteFile.oncomplete = () => {
-      console.log("removed");
-    };
+    store.delete(id);
 
     transaction.oncomplete = function () {
       db.close();
@@ -209,6 +207,7 @@ function sortFiles() {
         if (a.date > b.date) return -1;
         return 0;
       });
+      break;
     default:
       fileArray.sort((a, b) => {
         if (a.date < b.date) return -1;

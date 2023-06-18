@@ -110,3 +110,8 @@ button:hover{
   display: block;
   transition: 0.3 ease-in-out;
 }
+
+.no-files {
+  text-align: center;
+  margin-top: 40px;
+}
